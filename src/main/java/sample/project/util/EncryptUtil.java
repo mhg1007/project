@@ -21,7 +21,7 @@ public class EncryptUtil {
     final static byte[] ivBytes={0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-    final static String key="PolyTechnic12345";
+    final static String key="MementorRementia";
 
     public static String encHashSHA256(String str){
         String res;
