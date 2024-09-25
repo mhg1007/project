@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <title>login page</title>
+    <title>pf</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
@@ -22,16 +22,14 @@
                         <ul>
                             <li class="current"><a href="index01.html">Home</a></li>
                             <li>
-                                <a href="#" style="color: white;">진단하기</a>
+                                <a href="#" style="color:white">진단하기</a>
                             </li>
                             <li><a href="left-sidebar.html" style="color: white;">진단결과보기</a></li>
-                            <li><a href="right-sidebar.html" style="color: white;">뇌건강트레이너</a></li>
+                            <li><a href="right-sidebar.html" style="color:white;">뇌건강트레이너</a></li>
                         </ul>
                         <div id="auth" style="position: absolute; right: 10px; bottom: 62%; display: flex; flex-direction: row;">
-                            <button style ="background-color: rgb(255, 0, 0); width:100%; margin-right: 8px;" type="button" class="btn btn-primary">
-                            <a href="signUp.html" style="color: white;">회원가입</button></a>
-                            <button style ="background-color: rgb(255, 0, 0); width:100%;" type="button" class="btn btn-primary">
-                                <a href="login.html" style="color: white;">로그인</button></a>
+                            <button style ="background-color: rgb(255, 0, 0); width:100%; margin-right: 8px;" type="button" class="btn btn-primary">회원가입</button>
+                            <button style ="background-color: rgb(255, 0, 0); width:100%;" type="button" class="btn btn-primary">로그인</button>
                         </div>
                     </nav>
 
@@ -43,25 +41,31 @@
     <!-- 로그인 폼 컨테이너 -->
     <div>
     <div class="login-container" style = "margin : auto; margin-top: 3%;">
-        <h2>로그인</h2>
+        <h2>비밀번호 찾기</h2>
         <form style = "text-align: left;" action="/login" method="post">
             <label for="phonenumber">아아디(휴대폰번호):</label>
-            <input type="number" id="phonenumber" name="phonenumber" placeholder="핸드폰번호를 입력하세요" required>
 
-            <label for="password">비밀번호:</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            <div class="input-with-button">
+                <input type="number" id="phoneNumber" name="phone" placeholder="휴대폰 번호를 입력하세요" required>
+                <button style="float : right; height: auto;" type="button" class="btn-small">인증번호 받기</button>
+            </div>
+
+            <label for="number">인증번호작성:</label>
+            <input type="number" id="number" name="number" placeholder="인증번호를 입력하세요" required>
+
             
-            <button style ="width:100%" onclick="onSubmit()"  type="button" class="btn btn-primary">로그인</button>
+            <label for="password">비밀번호재설정:</label>
+            <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+
+            <label for="password">비밀번호확인:</label>
+            <input type="password" id="password" name="password" placeholder="다시한번 입력하세요" required>
+            
+            <button style ="width:100%" onclick="window.alert('비밀번호 변경이 완료되었습니다.')" type="button" class="btn btn-primary">비밀번호변경완료</button>
         </form>
 
         <div class="extra-links">
             
-            <button style ="width:100%"  type="button" class="btn btn-primary">
-                   <a href="signUp.html" style="color: white;">회원가입</a></button>
-            <button style ="margin-top: 3%;"width:100% type="button" class="btn btn-primary" >
-             <a href="if.html" style="color: white;">아이디찾기</a></button>
-            <button style ="margin-top: 3%;"width:100% type="button" class="btn btn-primary">
-             <a href="pf.html" style="color: white;">비밀번호찾기</a></button>
+        
     </div>
 </div>
     <style>
@@ -84,7 +88,7 @@
         }
 
         .login-container {
-            width: 300px;
+            width: 400px;
             padding: 20px;
             background-color: white;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -139,20 +143,5 @@
             text-decoration: underline;
         }
     </style>
-    <script>
-        function onSubmit() {
-            const phoneNumber = document.getElementById('phonenumber').value;
-            const password = document.getElementById('password').value;
-            
-            if (phoneNumber.length < 1) {
-            alert('휴대폰번호를 입력해주세요.');
-            return;
-        }   
-            if (password !== passwordConfirm || password.length < 1 || passwordConfirm.length < 1) {
-            alert('비밀번호를 입력해주세요.');
-            return;             
-        }
-        }
-    </script>
 </body>
 </html>

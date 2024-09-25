@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<!--
+	Arcana by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Id Find</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<div id="header">
+
+					<!-- Logo -->
+					<img  width="70"  src = "logo5.png" style="margin-right: 0% ;">
+						<h1><a href="index.html" id="logo5.png">REMENTIA </em></a></h1>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<ul>
+								<li class="current"><a href="index01.html">Home</a></li>
+								<li>
+									<a href="#" style="color: white;">진단하기</a>
+								</li>
+								<li><a href="left-sidebar.html" style="color: white;">진단결과보기</a></li>
+								<li><a href="right-sidebar.html" style="color: white;">뇌건강트레이너</a></li>
+							</ul>
+							<div id="auth" style="position: absolute; right: 10px; bottom: 62%; display: flex; flex-direction: row;">
+								<button style ="background-color: rgb(255, 0, 0); width:100%; margin-right: 8px;" type="button" class="btn btn-primary">
+                                 <a href="signUp.html" style="color: white;">회원가입</a></button>
+								<button style ="background-color: rgb(255, 0, 0); width:100%;" type="button" class="btn btn-primary">
+                                    <a href="login.html" style="color: white;">로그인</a>
+                                </button>
+							</div>
+						</nav>
+
+				</div>
+
+        
+    <!-- 로그인 폼 컨테이너 -->
+    <div>
+      <div class="login-container" style = "margin : auto; margin-top: 3%;">
+          <div style="text-align: center; width: 100%;">
+            <h2>아이디찾기</h2>
+            <h4>성함을 통해 아이디 <br>
+                <span style="font-weight: bold;"> (휴대폰번호)찾기 가능합니다</span>
+            </h4>
+          </div>
+          <form>
+              <label for="name" >성함:</label>
+              <input type="name" id="name" name="name" placeholder="성함를 입력하세요" required>
+              <button style = "width:100%; margin-top: 20px; margin-bottom: 20px;"  onclick="window.alert('***의 이름으로 등록된 번호는 010****9395 입니다')" type="button" class="btn btn-primary">아이디찾기</button>
+              
+              <button style = "width:100%;" type="button" class="btn btn-primary">
+               <a href="login.html" style="color: white;">로그인하러가기</a></button>
+          </form>
+  
+          <div class="extra-links">
+              
+             
+      </div>
+  </div>
+      <style>
+          body {
+              margin: 0;
+              padding: 0;
+              background-color: #f4f4f4;
+              font-family: Arial, sans-serif;
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+          }
+          .container {
+              flex-grow: 1;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              padding-top: 100px; /* 헤더 높이를 고려한 여백 */
+          }
+  
+          .login-container {
+              width: 300px;
+              padding: 20px;
+              background-color: white;
+              box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+              border-radius: 20px;
+              
+          }
+          h2 {
+              margin-bottom: 20px;
+          }
+          label, input {
+              display: block;
+              width: 100%;
+              margin-bottom: 15px;
+          }
+          input[type="name"],
+          input[type="text"],
+          input[type="password"] {
+              padding: 10px;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+          }
+  
+          input[type="submit"] {
+              padding: 10px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+          }
+  
+  
+          input[type="submit"] {
+              padding: 10px;
+              background-color: #007bff;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+          }
+  
+          .extra-links {
+              margin-top: 15px;
+          }
+  
+          .extra-links a {
+              text-decoration: none;
+              color: #007bff;
+          }
+  
+          .extra-links a:hover {
+              text-decoration: underline;
+          }
+      </style>
+  </body>
+  </html>
