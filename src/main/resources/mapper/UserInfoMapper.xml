@@ -31,4 +31,9 @@
         </if>
         AND USER_NAME = #{userName}
     </select>
+    <update id="updatePassword" parameterType="UserInfoDTO">
+        UPDATE USER_INFO
+        SET PASSWORD=#{password}
+        WHERE PHONE_NUM=#{phoneNum}
+    </update>
 </mapper>

@@ -64,7 +64,7 @@ public class UserInfoController {
         UserInfoDTO pDTO;
 
         try {
-            String phoneNum=CmmUtil.nvl(request.getParameter("userId"));
+            String phoneNum=CmmUtil.nvl(request.getParameter("phoneNum"));
             String userName=CmmUtil.nvl(request.getParameter("userName"));
             String password=CmmUtil.nvl(request.getParameter("password"));
 

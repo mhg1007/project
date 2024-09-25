@@ -2,12 +2,19 @@ package sample.project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sample.project.dto.UserInfoDTO;
 import sample.project.mapper.IUserInfoMapper;
 import sample.project.service.IUserInfoService;
+import sample.project.util.CmmUtil;
 
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,11 +23,50 @@ public class UserInfoService implements IUserInfoService {
 
     private final IUserInfoMapper userInfoMapper;
 
+    @Value("${coolsms.apikey}")
+    private String apiKey;
+
+    @Value("${coolsms.apisecret}")
+    private String apiSecret;
+
+    @Value("${coolsms.fromnumber}")
+    private String fromNumber;
+
     @Override
     public UserInfoDTO getPhoneNumExists(UserInfoDTO pDTO) throws Exception {
-        log.info("{}.getUserIdExists Start!",this.getClass().getName());
-        UserInfoDTO rDTO=userInfoMapper.getPhoneNumExists(pDTO);
-        log.info("{}.getUserIdExists End!",this.getClass().getName());
+
+        log.info("{}.phoneNumAuth Start!",this.getClass().getName());
+        UserInfoDTO rDTO= Optional.ofNullable(userInfoMapper.getPhoneNumExists(pDTO)).orElseGet(UserInfoDTO::new);
+        log.info("rDTO : {}",rDTO);
+
+        if(CmmUtil.nvl(rDTO.getExistsYn()).equals("N")){
+            int authNumber= ThreadLocalRandom.current().nextInt(100000,1000000);
+
+            log.info("authNumber : {}",authNumber);
+
+            DefaultMessageService messageService =  NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
+
+            Message sms=new Message();
+
+            sms.setFrom(fromNumber);
+            sms.setTo(pDTO.getPhoneNum());
+            sms.setText("인증번호는 "+authNumber+" 입니다.");
+
+            try{
+                messageService.send(sms);
+            }
+            catch (NurigoMessageNotReceivedException exception) {
+                log.info("{}",exception.getFailedMessageList());
+                log.info("{}",exception.getMessage());
+            } catch (Exception exception) {
+                log.info("{}",exception.getMessage());
+            }
+
+            rDTO.setAuthNumber(authNumber);
+        }
+
+        log.info("{}.phoneNumAuth End!",this.getClass().getName());
+
         return rDTO;
     }
 
@@ -57,11 +103,11 @@ public class UserInfoService implements IUserInfoService {
 
     @Override
     public UserInfoDTO searchPhoneNumOrPasswordProc(UserInfoDTO pDTO) throws Exception {
-        log.info("{}.searchUserIdOrPasswordProc Start!",this.getClass().getName());
+        log.info("{}.searchPhoneNumOrPasswordProc Start!",this.getClass().getName());
 
         UserInfoDTO rDTO=userInfoMapper.getPhoneNum(pDTO);
 
-        log.info("{}.searchUserIdOrPasswordProc End!",this.getClass().getName());
+        log.info("{}.searchPhoneNumOrPasswordProc End!",this.getClass().getName());
 
         return rDTO;
     }
