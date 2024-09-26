@@ -23,10 +23,10 @@
 							<ul>
 								<li class="current"><a href="index01.html">Home</a></li>
 								<li>
-									<a href="#" style="color: white;">진단하기</a>	
+									<a href="#" style="color: white;"><strong>진단하기</strong></a>
 								</li>
-								<li><a href="left-sidebar.html" style="color: white;">진단결과보기</a></li>
-								<li><a href="right-sidebar.html" style="color: white;">뇌건강트레이너</a></li>
+								<li><a href="left-sidebar.html" style="color: white;"><strong>진단결과보기</strong></a></li>
+								<li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
 							</ul>
                             <div id="auth" style="position:absolute; right: 10px; bottom: 62%; display: flex; flex-direction: row;">
 								<button style ="background-color: rgb(255, 0, 0); width:100%; margin-right: 8px;" type="button" class="btn btn-primary">
@@ -50,19 +50,22 @@
         <div>
             <label for="phonenumber">휴대폰번호:</label>
             <div class="input-with-button">
-                <input type="number" id="phone" name="phone" placeholder="핸드폰 번호를 입력하세요" required>
+                <input type="number" id="phonenumber" name="phonenumber" placeholder="핸드폰 번호를 입력하세요." required>
                 <button style="float:right; height: auto;" type="button" class="btn-small" onclick="window.alert('인증번호가 발송되었습니다.')">인증번호 받기</button>
             </div>
 
-            <label for="email">비밀번호:</label>
-            <input type="password" id="password" name="password" required>
+            <label for="number">인증번호:</label>
+            <input type="number" id="number" name="password" placeholder="인증번호를 입력해주세요" required>
+
+            <label for="password">비밀번호:</label>
+            <input type="password" id="password" name="password" placeholder="영문 숫자 포함 8자리 이상" required>
 
             
-            <label for="email">비밀번호확인:</label>
-            <input type="password" id="password_confirm" name="password_confirm" required>
+            <label for="password">비밀번호확인:</label>
+            <input type="password" id="password_confirm" name="password_confirm" placeholder="영문 숫자 포함 8자리 이상" required>
 
             <label for="name">성함:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" placeholder="성함을 입력하세요." required>
             
             
             
@@ -71,7 +74,7 @@
     </form>
 </div>
 </div>
-
+        </div>
 
 <style>
     body {
@@ -110,6 +113,8 @@
       h2 {
           margin-bottom: 20px;
           text-align: center;
+          h4 {
+         color : white;}
       }
       form {
           display: flex;
@@ -182,21 +187,49 @@
         const name = document.getElementById('name').value;
 
         if (phoneNumber.length < 1) {
-            alert('휴대폰번호를 입력해주세요.');
+                alert('휴대폰번호를 입력해주세요.');
+                return;
+            } 
+
+        if (!phoneNumber.match("^0[0-9]{1,2}[0-9]{3,4}[0-9]{4}$")) {
+                alert("휴대폰 번호를 맞게 입력해주세요.");
+                return;
+            }
+        else if(phoneNumber.match("^0[0-9]{1,2}[0-9]{3,4}[0-9]{4}$")) {
+                alert("휴대폰 번호를 맞게 입력했습니다.");   
+            }    
+        if (password.length < 1) {
+                alert("비밀번호를 입력해주세요.");
+                return;
+            }
+
+        if (password.length < 1 || !password.match("(?=.*\d)(?=.*[a-zA-z]).{8,}")) {
+                alert("비밀번호를 맞게 입력해주세요.");
+                return;             
+            }
+        else if (password.match("(?=.*\d)(?=.*[a-z]).{8,}")) {
+                alert("비밀번호를 맞게 입력했습니다.");
+            }   
+
+        if (passwordConfirm.length < 1) {
+                alert("비밀번호를 입력해주세요.");
+                return;
+        }
+        if (passwordConfirm.length < 1 || !password.match("(?=.*\d)(?=.*[a-zA-z]).{8,}")) {
+                alert("비밀번호를 맞게 입력해주세요.");
+        }
+        else if (passwordConfirm.match("(?=.*\d)(?=.*[a-z]).{8,}")) {
+                alert("비밀번호를 맞게 입력했습니다.");
+        }
+        if (name.length < 1) {
+            alert("성함을 입력해주세요.");
             return;
         }
-
-        if (password !== passwordConfirm || password.length < 1 || passwordConfirm.length < 1) {
-            alert('비밀번호를 입력해주세요.');
-            return;             
-        }
-        if(password !== passwordConfirm || password.length < 1 || passwordConfirm.length < 6 ) {
-            alert('비밀번호 6자리이상 입력해주세요.');
-            return;
-        }
-
-
     }
   </script>
+
+
+</body>
+
 </body>
 </html>
