@@ -8,31 +8,37 @@
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
 
-        // 아이디 중복체크여부 (중복 Y / 중복아님 : N)
+        // 핸드폰번호 중복체크여부 (중복 Y / 중복아님 N)
         let phoneNumCheck = "Y";
 
         // SMS 인증번호 발송 값
         let smsAuthNumber = "";
+
+        // 핸드폰번호 인증확인여부 (확인 Y / 확인안됨 N)
+        let phoneNumAuthCheck = "N";
 
         // HTML로딩이 완료되고, 실행됨
         $(document).ready(function () {
 
             let f = document.getElementById("f"); // form 태그
 
-            // 아이디 중복체크
+            // 핸드폰 번호 중복체크 및 인증번호 발송
             $("#btnPhoneNum").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
                 phoneNumExists(f)
+            })
 
+            //인증번호 확인
+            $("#btnPhoneNumAuth").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                phoneNumAuth(f)
             })
 
             // 회원가입
             $("#btnSend").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
                 doSubmit(f);
             })
-
         })
 
-        // 회원아이디 중복 체크
+        // 회원 핸드폰 번호 중복 체크
         function phoneNumExists(f) {
 
             if (f.phoneNum.value === "") {
@@ -54,10 +60,9 @@
                             f.phoneNum.focus();
 
                         } else {
-                            alert("가입 가능한 번호입니다. 인증번호가 발송되었습니다.");
+                            alert("인증번호가 발송되었습니다.");
                             phoneNumCheck = "N";
                             smsAuthNumber=json.authNumber;
-
                         }
 
                     }
@@ -65,11 +70,36 @@
             )
         }
 
+        // 인증번호 확인
+        function phoneNumAuth(f) {
+
+            if (smsAuthNumber.value === "") {
+                alert("인증번호 받기를 먼저 진행해 해주세요.");
+                f.phoneNum.focus();
+                return;
+            }
+
+            if (f.authNumber.value === "") {
+                alert("인증번호를 입력하세요.");
+                f.authNumber.focus();
+                return;
+            } else {
+                if (f.authNumber.value === smsAuthNumber) {
+                    alert("인증 확인 되었습니다.");
+                    phoneNumAuthCheck="Y";
+                } else {
+                    alert("인증번호가 일치하지 않습니다. 다시 확인해 주세요.");
+                    f.authNumber.focus();
+                    return;
+                }
+            }
+        }
+
         //회원가입 정보의 유효성 체크하기
         function doSubmit(f) {
 
             if (f.phoneNum.value === "") {
-                alert("아이디를 입력하세요.");
+                alert("핸드폰 번호를 입력하세요.");
                 f.phoneNum.focus();
                 return;
             }
@@ -110,11 +140,12 @@
                 return;
             }
 
-            if (f.authNumber.value != smsAuthNumber) {
-                alert("인증번호가 일치하지 않습니다.");
+            if (phoneNumAuthCheck.value === "N") {
+                alert("인증번호 확인을 진행해 해주세요.");
                 f.authNumber.focus();
                 return;
             }
+
 
             // Ajax 호출해서 회원가입하기
             $.ajax({
@@ -150,10 +181,16 @@
                 <div class="divTableCell">* 핸드폰번호
                 </div>
                 <div class="divTableCell">
-                    <input type="text" name="phoneNum" style="width:80%" placeholder="아이디"/>
+                    <input type="text" name="phoneNum" style="width:80%" placeholder="핸드폰번호"/>
+                    <button id="btnPhoneNum" type="button">인증번호받기</button>
+                </div>
+            </div>
+            <div class="divTableRow">
+                <div class="divTableCell">* 인증번호
+                </div>
+                <div class="divTableCell">
                     <input type="text" name="authNumber" style="width:30%" placeholder="인증번호"/>
-                    <button id="btnPhoneNum" type="button">중복체크</button>
-
+                    <button id="btnPhoneNumAuth" type="button">인증번호확인</button>
                 </div>
             </div>
             <div class="divTableRow">
