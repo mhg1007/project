@@ -17,7 +17,7 @@
                 #{password})
     </insert>
     <select id="getLogin" parameterType="UserInfoDTO" resultType="UserInfoDTO">
-        SELECT PHONE_NUM, PASSWORD
+        SELECT PHONE_NUM, PASSWORD, USER_NAME
         FROM USER_INFO
         WHERE PHONE_NUM=#{phoneNum}
           AND PASSWORD=#{password}

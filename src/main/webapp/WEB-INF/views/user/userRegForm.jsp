@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>회원가입 화면</title>
+    <title>회원가입</title>
     <link rel="stylesheet" href="/css/table.css"/>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
@@ -14,7 +14,7 @@
         // SMS 인증번호 발송 값
         let smsAuthNumber = "";
 
-        // 핸드폰번호 인증확인여부 (확인 Y / 확인안됨 N)
+        // 핸드폰 인증번호 확인여부 (확인 Y / 확인안됨 N)
         let phoneNumAuthCheck = "N";
 
         // HTML로딩이 완료되고, 실행됨
@@ -47,6 +47,12 @@
                 return;
             }
 
+            if(isNaN(f.phoneNum.value)){
+                alert("핸드폰 번호를 숫자로만 입력해 주세요.")
+                f.phoneNum.focus();
+                return;
+            }
+
             // Ajax 호출해서 회원가입하기
             $.ajax({
                     url: "/user/getPhoneNumExists",
@@ -58,7 +64,6 @@
                         if (json.existsYn === "Y") {
                             alert("이미 가입된 번호가 존재합니다.");
                             f.phoneNum.focus();
-
                         } else {
                             alert("인증번호가 발송되었습니다.");
                             phoneNumCheck = "N";
@@ -66,6 +71,7 @@
                         }
 
                     }
+
                 }
             )
         }
@@ -73,7 +79,7 @@
         // 인증번호 확인
         function phoneNumAuth(f) {
 
-            if (smsAuthNumber.value === "") {
+            if (smsAuthNumber === "") {
                 alert("인증번호 받기를 먼저 진행해 해주세요.");
                 f.phoneNum.focus();
                 return;
@@ -83,16 +89,17 @@
                 alert("인증번호를 입력하세요.");
                 f.authNumber.focus();
                 return;
-            } else {
-                if (f.authNumber.value === smsAuthNumber) {
-                    alert("인증 확인 되었습니다.");
-                    phoneNumAuthCheck="Y";
-                } else {
-                    alert("인증번호가 일치하지 않습니다. 다시 확인해 주세요.");
-                    f.authNumber.focus();
-                    return;
-                }
             }
+
+            if (f.authNumber.value == smsAuthNumber) {
+                alert("인증 확인 되었습니다.");
+                phoneNumAuthCheck="Y";
+            }
+            else {
+                alert("인증번호가 일치하지 않습니다. 다시 확인해 주세요.");
+                f.authNumber.focus();
+            }
+
         }
 
         //회원가입 정보의 유효성 체크하기
@@ -104,9 +111,21 @@
                 return;
             }
 
+            if(isNaN(f.phoneNum.value)){
+                alert("핸드폰 번호를 숫자로만 입력해 주세요.")
+                f.phoneNum.focus();
+                return;
+            }
+
             if (phoneNumCheck !== "N") {
                 alert("아이디 중복 체크 및 중복되지 않은 아이디로 가입 바랍니다.");
                 f.phoneNum.focus();
+                return;
+            }
+
+            if (phoneNumAuthCheck !== "Y") {
+                alert("인증번호 확인을 진행해 해주세요.");
+                f.authNumber.focus();
                 return;
             }
 
@@ -123,7 +142,7 @@
             }
 
             if (f.password2.value === "") {
-                alert("비밀번호확인을 입력하세요.");
+                alert("비밀번호 확인을 입력하세요.");
                 f.password2.focus();
                 return;
             }
@@ -139,13 +158,6 @@
                 f.authNumber.focus();
                 return;
             }
-
-            if (phoneNumAuthCheck.value === "N") {
-                alert("인증번호 확인을 진행해 해주세요.");
-                f.authNumber.focus();
-                return;
-            }
-
 
             // Ajax 호출해서 회원가입하기
             $.ajax({
@@ -171,7 +183,7 @@
     </script>
 </head>
 <body>
-<h2>회원 가입하기</h2>
+<h2>회원가입</h2>
 <hr/>
 <br/>
 <form id="f">
@@ -181,7 +193,7 @@
                 <div class="divTableCell">* 핸드폰번호
                 </div>
                 <div class="divTableCell">
-                    <input type="text" name="phoneNum" style="width:80%" placeholder="핸드폰번호"/>
+                    <input type="text" name="phoneNum" style="width:80%" placeholder="핸드폰번호( - 없이 입력 )"/>
                     <button id="btnPhoneNum" type="button">인증번호받기</button>
                 </div>
             </div>
@@ -189,7 +201,7 @@
                 <div class="divTableCell">* 인증번호
                 </div>
                 <div class="divTableCell">
-                    <input type="text" name="authNumber" style="width:30%" placeholder="인증번호"/>
+                    <input type="text" name="authNumber" style="width:30%" placeholder="인증번호 6자리" inputmode="numeric" maxlength="6"/>
                     <button id="btnPhoneNumAuth" type="button">인증번호확인</button>
                 </div>
             </div>
@@ -204,7 +216,7 @@
                 <div class="divTableCell">* 비밀번호
                 </div>
                 <div class="divTableCell">
-                    <input type="password" name="password" style="width:95%" placeholder="비밀번호"/>
+                    <input type="password" name="password" style="width:95%" placeholder="비밀번호" autocomplete="new-password"/>
                 </div>
             </div>
             <div class="divTableRow">
