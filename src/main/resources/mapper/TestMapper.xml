@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sample.project.mapper.ITestMapper">
+    <select id="getTestList" parameterType="TestDTO" resultType="TestDTO">
+        SELECT TEST_SEQ, TEST_RES,
+               TO_CHAR(TEST_DT, 'YYYY-MM-DD') AS TEST_DT
+        FROM TEST
+        WHERE PHONE_NUM=#{phoneNum}
+        ORDER BY TEST_SEQ
+    </select>
+    <insert id="insertTest" parameterType="TestDTO">
+        INSERT INTO TEST
+        (TEST_SEQ, TEST_DT, TEST_RES, PHONE_NUM)
+        VALUES(
+                (SELECT NVL(MAX(A.TEST_SEQ),0)+1 FROM TEST A),
+                NOW(), #{testRes}, #{phoneNum}
+            )
+    </insert>
+</mapper>

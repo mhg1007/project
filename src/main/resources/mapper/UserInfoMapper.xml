@@ -11,10 +11,18 @@
         INSERT INTO USER_INFO
         (PHONE_NUM,
          USER_NAME,
-         PASSWORD)
+         PASSWORD,
+         REG_ID,
+         REG_DT,
+         CHG_ID,
+         CHG_DT)
         VALUES (#{phoneNum},
                 #{userName},
-                #{password})
+                #{password},
+                #{phoneNum},
+                NOW(),
+                #{phoneNum},
+                NOW())
     </insert>
     <select id="getLogin" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT PHONE_NUM, PASSWORD, USER_NAME
@@ -22,15 +30,22 @@
         WHERE PHONE_NUM=#{phoneNum}
           AND PASSWORD=#{password}
     </select>
+
     <select id="getPhoneNum" parameterType="UserInfoDTO" resultType="UserInfoDTO">
         SELECT PHONE_NUM, USER_NAME
         FROM USER_INFO
         WHERE 1=1
-        <if test="phoneNum neq null and userName neq ''">
-            AND PHONE_NUM = #{phoneNum}
-        </if>
         AND USER_NAME = #{userName}
     </select>
+
+    <select id="getPassword" parameterType="UserInfoDTO" resultType="UserInfoDTO">
+        SELECT PHONE_NUM, USER_NAME
+        FROM USER_INFO
+        WHERE 1=1
+        AND PHONE_NUM = #{phoneNum}
+        AND USER_NAME = #{userName}
+    </select>
+
     <update id="updatePassword" parameterType="UserInfoDTO">
         UPDATE USER_INFO
         SET PASSWORD=#{password}

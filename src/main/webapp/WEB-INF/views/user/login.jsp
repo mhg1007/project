@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
-    <link rel="stylesheet" href="/css/table.css"/>
+    <link rel="stylesheet" href="/css/main.css"/>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
 
@@ -31,13 +31,13 @@
                 let f = document.getElementById("f"); // form 태그
 
                 if (f.phoneNum.value === "") {
-                    alert("핸드폰 번호를 입력하세요.");
+                    alert("휴대전화 번호를 입력하세요.");
                     f.phoneNum.focus();
                     return;
                 }
 
                 if(isNaN(f.phoneNum.value)){
-                    alert("핸드폰 번호를 숫자로만 입력해 주세요.")
+                    alert("휴대전화 번호를 숫자로만 입력해 주세요.")
                     f.phoneNum.focus();
                     return;
                 }
@@ -73,35 +73,132 @@
         })
     </script>
 </head>
-<body>
-<h2>로그인</h2>
-<hr/>
-<br/>
-<form id="f">
-    <div class="divTable minimalistBlack">
-        <div class="divTableBody">
-            <div class="divTableRow">
-                <div class="divTableCell">핸드폰번호
-                </div>
-                <div class="divTableCell">
-                    <input type="text" name="phoneNum" id="phoneNum" style="width:95%" placeholder="핸드폰번호( - 없이 입력 )"/>
-                </div>
+<body class="is-preload">
+    <div id="page-wrapper">
+        <!-- Header -->
+        <div id="header">
+            <div id="auth" style="position:absolute; right: 10px; bottom: 93%; display: flex; flex-direction: row;">
+                <a href="/user/userRegForm" style="color: white;">
+                <button style ="background-color: #37c0fb; width:100%; margin-right: 5px;" type="button" class="btn btn-primary">회원가입</button></a>
+
+                <a href="/user/login" style="color: white;">
+                <button style ="background-color: #37c0fb; width:100%; margin-left: 5px;" type="button" class="btn btn-primary">로그인</button></a>
             </div>
-            <div class="divTableRow">
-                <div class="divTableCell">비밀번호
-                </div>
-                <div class="divTableCell">
-                    <input type="password" name="password" id="password" style="width:95%" placeholder="비밀번호" autocomplete="new-password"/>
-                </div>
-            </div>
-        </div>
+
+        <!-- Logo -->
+        <img  width="105"  src = "/logo5.png" style="margin-right: 0% ;">
+        <h1><a href="/index" id="logo5">REMENTIA</a></h1>
+
+        <!-- Nav -->
+        <nav id="nav">
+            <ul>
+                <li class="current"><a href="/index">Home</a></li>
+                <li>
+                <a href="/test/start" style="color: white;"><strong>진단하기</strong></a>
+                </li>
+                <li><a href="left-sidebar.html" style="color: white;"><strong>진단결과보기</strong></a></li>
+                <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
+            </ul>
+        </nav>
     </div>
+    <!-- 로그인 폼 컨테이너 -->
     <div>
-        <button id="btnLogin" type="button">로그인</button>
-        <button id="btnUserReg" type="button">회원가입</button>
-        <button id="btnSearchPhoneNum" type="button">아이디 찾기</button>
-        <button id="btnSearchPassword" type="button">비밀번호 찾기</button>
+    <div class="login-container" style = "margin : auto; margin-top: 3%; margin-bottom: 5%;">
+    <h2>로그인</h2>
+    <h2></h2>
+    <form id="f">
+        <div>
+            <label for="phoneNum">아이디(휴대전화번호)</label>
+            <input type="text" id="phoneNum" name="phoneNum" placeholder="휴대전화번호( - 없이 입력 )" required>
+
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="비밀번호" autocomplete="new-password" style="margin-bottom: 7%;" required>
+            <button id="btnLogin" type="button" class="btn btn-primary" style ="margin-top: 3%; width:100%">로그인</button>
+        </div>
+        <div style="margin-top: 3%; margin-bottom: 10%">
+            <button id="btnUserReg" type="button" class="btn btn-primary">회원가입</button>
+            <button id="btnSearchPhoneNum" type="button" class="btn btn-primary">아이디 찾기</button>
+            <button id="btnSearchPassword" type="button" class="btn btn-primary">비밀번호 찾기</button>
+        </div>
+    </form>
     </div>
-</form>
+    <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                font-family: Arial, sans-serif;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            .container {
+                flex-grow: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                padding-top: 100px; /* 헤더 높이를 고려한 여백 */
+            }
+
+            .login-container {
+              width: 560px;
+              padding: 20px;
+              background-color: white;
+              box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+              border-radius: 20px;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+            }
+            h2 {
+                margin-bottom: 20px;
+            }
+            label, input {
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            input[type="number"],
+            input[type="text"],
+            input[type="password"] {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            input[type="submit"] {
+                padding: 10px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+
+            input[type="submit"] {
+                padding: 10px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .extra-links {
+                margin-top: 15px;
+            }
+
+            .extra-links a {
+                text-decoration: none;
+                color: #007bff;
+            }
+
+            .extra-links a:hover {
+                text-decoration: underline;
+            }
+    </style>
 </body>
 </html>

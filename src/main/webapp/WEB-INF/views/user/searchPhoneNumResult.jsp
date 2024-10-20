@@ -1,27 +1,56 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page import="java.util.List" %>
 <%@ page import="sample.project.dto.UserInfoDTO" %>
 <%@ page import="sample.project.util.CmmUtil" %>
 <%@ page import="sample.project.util.EncryptUtil" %>
 <%
-    String ssUserName = CmmUtil.nvl((String) session.getAttribute("SS_USER_NAME")); // 로그인된 회원 이름
-    String ssPhoneNum = EncryptUtil.decAES128CBC(CmmUtil.nvl((String) session.getAttribute("SS_PHONE_NUM"))); // 로그인된 회원 휴대전화번호
-    String phoneNumLast=ssPhoneNum.substring(ssPhoneNum.length()-4,ssPhoneNum.length());
+    List<UserInfoDTO> rList = (List<UserInfoDTO>) request.getAttribute("rList");
+
+    String msg = "";
+    String phoneNumList="";
+
+    if (rList.size() > 0) { // 아이디 찾기 성공
+        msg = CmmUtil.nvl(rList.get(0).getUserName()) + " 회원님의 이름으로</br>등록된 휴대전화 번호는 </br></br>";
+
+        for(UserInfoDTO dto:rList){
+            String phoneNum=EncryptUtil.decAES128CBC(CmmUtil.nvl(dto.getPhoneNum()));
+            String phoneNumSec="";
+            if(phoneNum.length()==11){
+                phoneNumSec=phoneNum.replace(phoneNum.substring(3,7),"****");
+            }
+            else if(phoneNum.length()==10){
+                phoneNumSec=phoneNum.replace(phoneNum.substring(3,6),"***");
+            }
+            phoneNumList=phoneNumList+phoneNumSec+"</br>";
+        }
+        msg=msg+phoneNumList+"</br>입니다.";
+
+    } else {
+        msg = "번호가 존재하지 않습니다.";
+    }
 %>
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>로그인 성공</title>
+    <title>아이디(휴대전화번호)찾기결과</title>
     <link rel="stylesheet" href="/css/main.css"/>
     <script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
 
         // HTML로딩이 완료되고, 실행됨
         $(document).ready(function () {
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-            $("#btnSend").on("click", function () {
-                location.href = "/index";
+
+            // 로그인 화면 이동
+            $("#btnLogin").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                location.href = "/user/login";
             })
+
+            // 로그인 화면 이동
+            $("#btnSearchPassword").on("click", function () { // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                location.href = "/user/searchPassword";
+            })
+
         })
     </script>
 </head>
@@ -29,6 +58,13 @@
     <div id="page-wrapper">
         <!-- Header -->
         <div id="header">
+            <div id="auth" style="position:absolute; right: 10px; bottom: 93%; display: flex; flex-direction: row;">
+                <a href="/user/userRegForm" style="color: white;">
+                <button style ="background-color: #37c0fb; width:100%; margin-right: 5px;" type="button" class="btn btn-primary">회원가입</button></a>
+
+                <a href="/user/login" style="color: white;">
+                <button style ="background-color: #37c0fb; width:100%; margin-left: 5px;" type="button" class="btn btn-primary">로그인</button></a>
+            </div>
 
         <!-- Logo -->
         <img  width="105"  src = "/logo5.png" style="margin-right: 0% ;">
@@ -46,18 +82,20 @@
             </ul>
         </nav>
     </div>
-    <div class="login-container" style = "margin : auto; margin-top: 3%; margin-bottom: 5%;">
-        <div style="margin-top:30%; margin-bottom:30%;">
-            <div><%=ssUserName%> (<%=phoneNumLast%>) 님 </div>
-            <div>로그인 되었습니다</div>
-        </div>
-        <button id="btnSend" type="button">메인 화면 이동</button>
-    </div>
-<div>
-</div>
-<br/><br/>
 
-<style>
+    <!-- 로그인 폼 컨테이너 -->
+    <div>
+    <div class="login-container" style = "margin : auto; margin-top: 3%; margin-bottom: 5%;">
+    <h2>아이디(휴대전화번호) 찾기 결과</h2>
+    <h2></h2>
+    <form id="f">
+        <div style="margin-top:15%; margin-bottom:15%; text-align:center">
+            <%=msg%>
+        </div>
+        <button id="btnLogin" type="button">로그인 하기</button>
+        <button id="btnSearchPassword" type="button" class="btn btn-primary" style="margin-bottom:15%;">비밀번호 찾기</button>
+    </form>
+     <style>
             body {
                 margin: 0;
                 padding: 0;
@@ -134,6 +172,6 @@
             .extra-links a:hover {
                 text-decoration: underline;
             }
-        </style>
+    </style>
 </body>
 </html>

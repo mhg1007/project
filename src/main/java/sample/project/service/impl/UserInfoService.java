@@ -12,7 +12,9 @@ import sample.project.dto.UserInfoDTO;
 import sample.project.mapper.IUserInfoMapper;
 import sample.project.service.IUserInfoService;
 import sample.project.util.CmmUtil;
+import sample.project.util.EncryptUtil;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -33,13 +35,22 @@ public class UserInfoService implements IUserInfoService {
     private String fromNumber;
 
     @Override
-    public UserInfoDTO getPhoneNumExists(UserInfoDTO pDTO) throws Exception {
+    public UserInfoDTO getPhoneNumExists(UserInfoDTO pDTO, int checkNum) throws Exception {
 
         log.info("{}.phoneNumAuth Start!",this.getClass().getName());
         UserInfoDTO rDTO= Optional.ofNullable(userInfoMapper.getPhoneNumExists(pDTO)).orElseGet(UserInfoDTO::new);
         log.info("rDTO : {}",rDTO);
 
-        if(CmmUtil.nvl(rDTO.getExistsYn()).equals("N")){
+        //checkNum : 0은 가입할때(중복되는 번호가 없는지 확인), 1은 ID찾기할때(번호가 있는지 확인)
+        String check="";
+        if(checkNum==0){
+            check="N";
+        }
+        else if (checkNum==1) {
+            check="Y";
+        }
+
+        if(CmmUtil.nvl(rDTO.getExistsYn()).equals(check)){
             int authNumber= ThreadLocalRandom.current().nextInt(100000,1000000);
 
             log.info("authNumber : {}",authNumber);
@@ -49,7 +60,7 @@ public class UserInfoService implements IUserInfoService {
             Message sms=new Message();
 
             sms.setFrom(fromNumber);
-            sms.setTo(pDTO.getPhoneNum());
+            sms.setTo(EncryptUtil.decAES128CBC(pDTO.getPhoneNum()));
             sms.setText("인증번호는 "+authNumber+" 입니다.");
 
             try{
@@ -102,21 +113,31 @@ public class UserInfoService implements IUserInfoService {
     }
 
     @Override
-    public UserInfoDTO searchPhoneNumOrPasswordProc(UserInfoDTO pDTO) throws Exception {
+    public List<UserInfoDTO> searchPhoneNumProc(UserInfoDTO pDTO) throws Exception {
         log.info("{}.searchPhoneNumOrPasswordProc Start!",this.getClass().getName());
 
-        UserInfoDTO rDTO=userInfoMapper.getPhoneNum(pDTO);
+        List<UserInfoDTO> rList=userInfoMapper.getPhoneNum(pDTO);
 
         log.info("{}.searchPhoneNumOrPasswordProc End!",this.getClass().getName());
+
+        return rList;
+    }
+
+    @Override
+    public UserInfoDTO searchPasswordProc(UserInfoDTO pDTO) throws Exception {
+        log.info("{}.searchPasswordProc Start!",this.getClass().getName());
+
+        UserInfoDTO rDTO=userInfoMapper.getPassword(pDTO);
+
+        log.info("{}.searchPasswordProc End!",this.getClass().getName());
 
         return rDTO;
     }
 
     @Override
-    public int newPasswordProc(UserInfoDTO pDTO) throws Exception {
+    public void newPasswordProc(UserInfoDTO pDTO) throws Exception {
         log.info("{}.newPasswordProc Start!",this.getClass().getName());
-        int success=userInfoMapper.updatePassword(pDTO);
+        userInfoMapper.updatePassword(pDTO);
         log.info("{}.newPasswordProc End!",this.getClass().getName());
-        return success;
     }
 }
