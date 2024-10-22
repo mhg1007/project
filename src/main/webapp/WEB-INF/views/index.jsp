@@ -54,17 +54,15 @@
 					<%} %>
 
 					<!-- Logo -->
-					<img  width="70"  src = "logo5.png" style="margin-right: 0% ;">
-						<h1><a href="index.html" id="logo5.png">REMENTIA </em></a></h1>
+					<img  width="105"  src = "/logo5.png" alt="REMENTIA 로고" style="margin-right: 0% ;">
+					<h1><a href="/index" id="logo5.png">REMENTIA </em></a></h1>
 
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
 								<li class="current"><a href="/index">Home</a></li>
-								<li>
-									<a href="/test/start" style="color:white">진단하기</a>
-								</li>
-								<li><a href="left-sidebar.html" style="color: white;">진단결과보기</a></li>
+								<li><a href="/test/start" style="color:white">진단하기</a></li>
+								<li><a href="/test/resultList" style="color: white;">진단결과보기</a></li>
 								<li><a href="right-sidebar.html" style="color: white;">뇌건강트레이너</a></li>
 							</ul>
 						</nav>

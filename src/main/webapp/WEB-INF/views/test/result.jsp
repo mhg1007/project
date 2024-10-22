@@ -5,7 +5,7 @@
 <%
     String ssUserName = CmmUtil.nvl((String) session.getAttribute("SS_USER_NAME")); // 로그인된 회원 이름
     String ssPhoneNum = EncryptUtil.decAES128CBC(CmmUtil.nvl((String) session.getAttribute("SS_PHONE_NUM"))); // 로그인된 회원 휴대전화번호
-    String result=CmmUtil.nvl((String) request.getAttribute("result"));
+    String result = CmmUtil.nvl((String) session.getAttribute("result"));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -29,6 +29,7 @@
                     $("#btnTest").on("click", function () {
                         location.href = "/test/test";
                     })
+
                 })
             </script>
 	</head>
@@ -58,18 +59,16 @@
 					<%} %>
 
 			<!-- Logo -->
-			<img  width="70"  src = "logo5.png" style="margin-right: 0% ;">
-			<h1><a href="index.html" id="logo5.png">REMENTIA </em></a></h1>
+			<img  width="105"  src = "/logo5.png" style="margin-right: 0% ;">
+			<h1><a href="/index" id="logo5.png">REMENTIA </em></a></h1>
 
 			<!-- Nav -->
             <nav id="nav">
                 <ul>
-                <li class="current"><a href="/index">Home</a></li>
-                <li>
-                <a href="/test/start" style="color: white;"><strong>진단하기</strong></a>
-                </li>
-                <li><a href="left-sidebar.html" style="color: white;"><strong>진단결과보기</strong></a></li>
-                <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
+                    <li class="current"><a href="/index">Home</a></li>
+                    <li><a href="/test/start" style="color: white;"><strong>진단하기</strong></a></li>
+                    <li><a href="/test/resultList" style="color: white;"><strong>진단결과보기</strong></a></li>
+                    <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
                 </ul>
             </nav>
 
@@ -80,10 +79,12 @@
                     <div style="margin-top: 3%; margin-bottom: 10%">
                         <div>진단 결과는</div>
                         <%if(result.equals("good")){%>
-                        <div>위험도 낮음<br>입니다</div>
-                        <%}else{ %>
-                        <div>위험도 높음<br>입니다</div>
-                        <div>상담을 권유드립니다<br>치매상담콜센터<br>☎1899-9988</div>
+                        <div><strong>위험도 낮음</strong> 입니다<br></div>
+                        <%}else if(result.equals("bad")){ %>
+                        <div><strong>위험도 높음</strong> 입니다<br></div>
+                        <div>상담을 권유드립니다<br><br>치매상담콜센터<br>☎1899-9988</div>
+                        <%}else{%>
+                        <div>오류가 발생했습니다<br>다시 시도해주세요</div>
                         <%} %>
                     </div>
                 </div>
@@ -166,5 +167,6 @@
                     text-decoration: underline;
                 }
         </style>
+
 	</body>
 </html>

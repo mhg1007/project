@@ -140,4 +140,11 @@ public class UserInfoService implements IUserInfoService {
         userInfoMapper.updatePassword(pDTO);
         log.info("{}.newPasswordProc End!",this.getClass().getName());
     }
+
+    @Override
+    public void deleteUserInfo(UserInfoDTO pDTO) throws Exception {
+        log.info("{}.deleteUserInfo Start!",this.getClass().getName());
+        userInfoMapper.deleteUserInfo(pDTO);
+        log.info("{}.newPasswordProc End!",this.getClass().getName());
+    }
 }

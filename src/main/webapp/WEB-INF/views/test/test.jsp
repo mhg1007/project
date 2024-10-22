@@ -16,16 +16,14 @@
 		<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
         <script type="text/javascript">
 
-                // HTML로딩이 완료되고, 실행됨
-                $(document).ready(function () {
-                    // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                    $("#startBtn").on("click", function () {
-                        displayRandomSentence()
-                    })
+            // HTML로딩이 완료되고, 실행됨
+            $(document).ready(function () {
+                // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                $("#startBtn").on("click", function () {
+                    displayRandomSentence()
                 })
-        </script>
+            })
 
-        <script>
             // 미리 정의된 문장 배열
             const sentences = [
                         "오늘 저녁은 무엇을 먹을까 고민하고 있어요.",
@@ -55,60 +53,8 @@
             function displayRandomSentence() {
                 const randomIndex = Math.floor(Math.random() * sentences.length);
                 const randomSentence = sentences[randomIndex];
-                document.getElementById("randomSentence").textContent = "다음 문장을 따라읽어 주세요<br>"
-                                                                        +randomSentence
-                                                                        +"<br>종료버튼을 누르면 바로 진단이 시작됩니다";
+                document.getElementById("randomSentence").textContent = randomSentence
             }
-        </script>
-
-        <script>
-            const startBtn = document.getElementById('startBtn');
-            const stopBtn = document.getElementById('stopBtn');
-            let mediaRecorder;
-            let audioChunks = [];
-
-            // Start Recording
-            startBtn.addEventListener('click', async () => {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-
-                mediaRecorder.start();
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                };
-            });
-
-            // Stop Recording
-            stopBtn.addEventListener('click', () => {
-                mediaRecorder.stop();
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-
-                mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    const formData = new FormData();
-                    formData.append('file', audioBlob, 'recording.wav');
-
-                    // Send the recorded audio file to Spring Boot server
-                    fetch('/test/upload', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        console.log('Success:', data);
-                        window.location.href = '/test/result';
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                    });
-
-                    audioChunks = [];  // Reset chunks
-                };
-            });
         </script>
 	</head>
     <body class="is-preload">
@@ -127,18 +73,16 @@
                     </div>
 
 			<!-- Logo -->
-			<img  width="70"  src = "logo5.png" style="margin-right: 0% ;">
-			<h1><a href="index.html" id="logo5.png">REMENTIA </em></a></h1>
+			<img  width="105"  src = "/logo5.png" style="margin-right: 0% ;">
+			<h1><a href="/index" id="logo5.png">REMENTIA </em></a></h1>
 
 			<!-- Nav -->
             <nav id="nav">
                 <ul>
-                <li class="current"><a href="/index">Home</a></li>
-                <li>
-                <a href="/test/start" style="color: white;"><strong>진단하기</strong></a>
-                </li>
-                <li><a href="left-sidebar.html" style="color: white;"><strong>진단결과보기</strong></a></li>
-                <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
+                    <li class="current"><a href="/index">Home</a></li>
+                    <li><a href="/test/start" style="color: white;"><strong>진단하기</strong></a></li>
+                    <li><a href="/test/resultList" style="color: white;"><strong>진단결과보기</strong></a></li>
+                    <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
                 </ul>
             </nav>
 
@@ -147,7 +91,8 @@
                 <h2>진단하기</h2>
                 <h2></h2>
                     <div style="margin-top: 3%; margin-bottom: 10%">
-                        <p id="randomSentence">녹음 시작 버튼을 누르면 문장이 제시됩니다<br>제시되는 문장을 따라읽어주세요</p>
+                        <p id="status">녹음 시작 버튼을 누르면 문장이 제시됩니다</p>
+                        <p id="randomSentence">제시되는 문장을 따라읽어주세요</p>
                         <button id="startBtn">녹음 시작</button>
                         <button id="stopBtn" disabled>녹음 종료</button>
                     </div>
@@ -231,5 +176,70 @@
                     text-decoration: underline;
                 }
         </style>
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const statusDisplay = document.getElementById('status'); // 상태 메시지 표시용 요소
+
+            if (startBtn && stopBtn && statusDisplay) {
+                startBtn.addEventListener('click', async () => {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                        const mediaRecorder = new MediaRecorder(stream);
+                        let audioChunks = [];
+
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstart = () => {
+                            statusDisplay.textContent = '다음 문장을 따라읽고 녹음 종료를 눌러주세요.';  // 녹음 시작 메시지
+                        };
+
+                        mediaRecorder.onstop = () => {
+                            statusDisplay.textContent = '녹음이 종료되었습니다. 작업을 진행합니다.';  // 녹음 종료 메시지
+                            // 여기서 서버로 녹음 파일을 전송할 수 있습니다
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const formData = new FormData();
+                            formData.append('file', audioBlob, 'recording.wav');
+
+                            fetch("/test/upload", {
+                                method: "post",
+                                body: formData
+                            }).then(response => {
+                                if (response.ok) {
+                                    statusDisplay.textContent = '진단이 진행됩니다.';
+                                    location.href="/test/result";
+                                } else {
+                                    statusDisplay.textContent = '업로드 실패하였습니다. 다시 시도해주세요.';
+                                }
+                            }).catch(error => {
+                                console.error('Upload error:', error);
+                                statusDisplay.textContent = '에러가 발생하였습니다.';
+                            });
+
+                            audioChunks = [];
+                        };
+
+                        mediaRecorder.start();
+                        startBtn.disabled = true;
+                        stopBtn.disabled = false;
+
+                        stopBtn.addEventListener('click', () => {
+                            mediaRecorder.stop();
+                            startBtn.disabled = false;
+                            stopBtn.disabled = true;
+                        });
+                    } catch (err) {
+                        console.error('Error accessing media devices.', err);
+                        alert('마이크 접속에 실패했습니다. 마이크 사용을 허용해주세요.');
+                    }
+                });
+            } else {
+                console.error('startBtn, stopBtn, or statusDisplay element not found');
+            }
+        });
+    </script>
 	</body>
 </html>

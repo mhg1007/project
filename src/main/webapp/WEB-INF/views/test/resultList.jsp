@@ -22,8 +22,8 @@
                 // HTML로딩이 완료되고, 실행됨
                 $(document).ready(function () {
                     // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                    $("#btnMyPage").on("click", function () {
-                        location.href = "/user/myPage";
+                    $("#btnIndex").on("click", function () {
+                        location.href = "/index";
                     })
                 })
             </script>
@@ -54,18 +54,16 @@
 					<%} %>
 
 			<!-- Logo -->
-			<img  width="70"  src = "logo5.png" style="margin-right: 0% ;">
-			<h1><a href="index.html" id="logo5.png">REMENTIA </em></a></h1>
+			<img  width="105"  src = "/logo5.png" style="margin-right: 0% ;">
+			<h1><a href="/index" id="logo5.png">REMENTIA </em></a></h1>
 
 			<!-- Nav -->
             <nav id="nav">
                 <ul>
-                <li class="current"><a href="/index">Home</a></li>
-                <li>
-                <a href="/test/start" style="color: white;"><strong>진단하기</strong></a>
-                </li>
-                <li><a href="left-sidebar.html" style="color: white;"><strong>진단결과보기</strong></a></li>
-                <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
+                    <li class="current"><a href="/index">Home</a></li>
+                    <li><a href="/test/start" style="color: white;"><strong>진단하기</strong></a></li>
+                    <li><a href="/test/resultList" style="color: white;"><strong>진단결과보기</strong></a></li>
+                    <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
                 </ul>
             </nav>
 
@@ -73,33 +71,35 @@
                 <div class="login-container" style = "margin : auto; margin-top: 3%; margin-bottom: 5%;">
                 <h2>진단결과</h2>
                 <h2></h2>
-                    <div style="margin-top: 3%; margin-bottom: 10%">
-                    <div>
-                        <div>번호</div>
-                        <div>진단결과</div>
-                        <div>진단일자</div>
+                <div class="table">
+                    <div class="table-row" style="margin-top: 3%; margin-bottom: 10%;">
+                        <%if(rList.size() != 0){%>
+                        <div class="table-cell">번호</div>
+                        <div class="table-cell">진단결과</div>
+                        <div class="table-cell">진단일시</div>
+                        <%}else{ %>
+                        <h3>진단 기록이 없습니다<br>진단을 먼저 진행해주세요</h3>
+                        <div>
+                            <button id="btnIndex" type="button" class="btn btn-primary">돌아가기</button>
+                        </div>
+                        <%} %>
                     </div>
                     <%
                         for (TestDTO dto : rList) {
                     %>
-                    <div>
-                        <div><%=CmmUtil.nvl(dto.getTestSeq())%></div>
-
+                    <div class="table-row" style="margin-top: 3%; margin-bottom: 5%; text-align: left;">
+                        <div class="table-cell"><%=CmmUtil.nvl(dto.getTestSeq())%></div>
                         <%if(CmmUtil.nvl(dto.getTestRes()) == "good"){%>
-                        <div>위험도 낮음</div>
+                        <div class="table-cell">위험도 낮음</div>
                         <%}else{ %>
-                        <div>위험도 높음</div>
+                        <div class="table-cell">위험도 높음</div>
                         <%} %>
-
-                        <div><%=CmmUtil.nvl(dto.getTestDt())%></div>
-                    <div>
+                        <div class="table-cell"><%=CmmUtil.nvl(dto.getTestDt())%></div>
+                    </div>
                     <%
                         }
                     %>
-                    </div>
                 </div>
-                <div>
-                    <button id="btnMyPage" type="button" class="btn btn-primary">돌아가기</button>
                 </div>
             </div>
             <style>
@@ -122,7 +122,7 @@
                 }
 
                 .login-container {
-                  width: 560px;
+                  width: 644px;
                   padding: 20px;
                   background-color: white;
                   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -132,6 +132,22 @@
                   justify-content: center;
                   align-items: center;
                 }
+                .table{
+                    display:table;
+                    text-align:right;
+                    width:80%;
+                    margin-bottom: 10%;
+                    text-align: center;
+                }
+                .table-row{
+                    display:table-row;
+                    text-align: center;
+                }
+                .table-cell{
+                    display:table-cell;
+                    text-align: center;
+                }
+
                 h2 {
                     margin-bottom: 20px;
                 }

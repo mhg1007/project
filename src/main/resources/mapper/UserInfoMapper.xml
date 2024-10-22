@@ -51,4 +51,9 @@
         SET PASSWORD=#{password}
         WHERE PHONE_NUM=#{phoneNum}
     </update>
+
+    <delete id="deleteUserInfo" parameterType="UserInfoDTO">
+        DELETE FROM USER_INFO
+        WHERE PHONE_NUM=#{phoneNum}
+    </delete>
 </mapper>

@@ -314,4 +314,59 @@ public class UserInfoController {
         return "/user/myPage";
     }
 
+    @GetMapping(value = "delete")
+    public String delete(){
+        log.info("{}.user/delete Start!",this.getClass().getName());
+        log.info("{}.user/delete End!",this.getClass().getName());
+        return "/user/delete";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "deleteProc")
+    public MsgDTO deleteProc(HttpServletRequest request, HttpSession session) throws Exception{
+        log.info("{}.deleteProc Start!",this.getClass().getName());
+
+        int res=0;
+        String msg="";
+        MsgDTO dto;
+
+        UserInfoDTO pDTO;
+
+        try {
+            String phoneNum=CmmUtil.nvl((String) session.getAttribute("SS_PHONE_NUM"));
+            String password=CmmUtil.nvl(request.getParameter("password"));
+
+            log.info("phoneNum : {} / password : {}", EncryptUtil.decAES128CBC(phoneNum), password);
+
+            pDTO=new UserInfoDTO();
+            pDTO.setPhoneNum(phoneNum);
+            pDTO.setPassword(EncryptUtil.encHashSHA256(password));
+
+            UserInfoDTO rDTO=userInfoService.getLogin(pDTO);
+
+            if(!CmmUtil.nvl(rDTO.getPhoneNum()).isEmpty()){
+                userInfoService.deleteUserInfo(pDTO);
+                res=1;
+                msg="회원 탈퇴가 완료 되었습니다.";
+                session.invalidate();
+            }
+            else{
+                msg="비밀번호가 올바르지 않습니다.";
+            }
+        }
+        catch (Exception e){
+            msg="시스템 문제로 실패했습니다.";
+            res=2;
+            log.info(e.toString());
+        }
+        finally {
+            dto=new MsgDTO();
+            dto.setResult(res);
+            dto.setMsg(msg);
+
+            log.info("{}.deleteProc End!",this.getClass().getName());
+        }
+
+        return dto;
+    }
 }

@@ -3,8 +3,6 @@ package sample.project.controller;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sample.project.dto.TestDTO;
 import sample.project.service.ITestService;
 import sample.project.util.CmmUtil;
+import sample.project.util.EncryptUtil;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,7 +36,7 @@ public class TestController {
         log.info("{}.resultList start!", this.getClass().getName());
 
         String phoneNum=CmmUtil.nvl((String) session.getAttribute("SS_PHONE_NUM"));
-        log.info("phoneNum : {}", phoneNum);
+        log.info("phoneNum : {}", EncryptUtil.decAES128CBC(phoneNum));
 
         TestDTO pDTO=new TestDTO();
         pDTO.setPhoneNum(phoneNum);
@@ -45,7 +44,7 @@ public class TestController {
         List<TestDTO> rList = Optional.ofNullable(testService.getTestList(pDTO)).orElseGet(ArrayList::new);
         model.addAttribute("rList",rList);
 
-        log.info("{}.noticeList End!", this.getClass().getName());
+        log.info("{}.resultList End!", this.getClass().getName());
 
         return "test/resultList";
     }
@@ -60,7 +59,7 @@ public class TestController {
 
     @ResponseBody
     @PostMapping("/upload")
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, HttpSession session) {
         try {
             // 파일을 로컬 또는 메모리에 저장
             Path tempFile = Files.createTempFile("recording", ".wav");
@@ -69,14 +68,24 @@ public class TestController {
             // 파일 경로를 Python 서버로 전송
             String result = testService.callPythonService(tempFile.toString());
 
-            return ResponseEntity.ok("Python 서버에서 받은 결과: " + result);
+            // Python 서버로부터 받은 처리 결과를 저장
+            session.setAttribute("result", result);
+
+            return "redirect:/result";
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File upload failed");
+            log.info(e.toString());
+            return "error";
         }
     }
 
     @GetMapping(value = "result")
-    public String testResult(@ModelAttribute("result") String result, ModelMap model, HttpSession session) throws Exception {
+    public String testResult(HttpSession session) throws Exception {
+
+        log.info("{}.result start!", this.getClass().getName());
+
+        String result= CmmUtil.nvl((String) session.getAttribute("result"));
+
+        log.info("result: {}", result);
 
         TestDTO pDTO=new TestDTO();
         String phoneNum=CmmUtil.nvl((String) session.getAttribute("SS_PHONE_NUM"));
@@ -86,8 +95,7 @@ public class TestController {
 
         testService.insertTest(pDTO);
 
-        // Python 서버로부터 받은 처리 결과를 모델에 추가
-        model.addAttribute("result", result);
+        log.info("{}.result end!", this.getClass().getName());
 
         return "test/result";
     }

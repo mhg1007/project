@@ -11,4 +11,5 @@ public interface IUserInfoService {
     List<UserInfoDTO> searchPhoneNumProc(UserInfoDTO pDTO) throws Exception;
     UserInfoDTO searchPasswordProc(UserInfoDTO pDTO) throws Exception;
     void newPasswordProc(UserInfoDTO pDTO) throws Exception;
+    void deleteUserInfo(UserInfoDTO pDTO) throws Exception;
 }

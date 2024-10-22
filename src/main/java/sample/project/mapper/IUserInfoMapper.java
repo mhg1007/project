@@ -13,4 +13,5 @@ public interface IUserInfoMapper {
     List<UserInfoDTO> getPhoneNum(UserInfoDTO pDTO) throws Exception;
     UserInfoDTO getPassword(UserInfoDTO pDTO) throws Exception;
     void updatePassword(UserInfoDTO pDTO) throws Exception;
+    void deleteUserInfo(UserInfoDTO pDTO) throws Exception;
 }

@@ -2,6 +2,7 @@ package sample.project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -35,7 +36,7 @@ public class TestService implements ITestService {
     @Override
     public String callPythonService(String filePath) {
         RestTemplate restTemplate = new RestTemplate();
-        String pythonServerUrl = "http://localhost:5000/process-audio";  // Python 서버 URL
+        String pythonServerUrl = "http://localhost:5000/test_process";  // Python 서버 URL
 
         // 요청을 위한 헤더 및 본문 설정
         HttpHeaders headers = new HttpHeaders();
@@ -48,10 +49,11 @@ public class TestService implements ITestService {
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(request, headers);
 
         // Python 서버로 POST 요청 전송 후 응답 받기
-        ResponseEntity<Map> response = restTemplate.exchange(pythonServerUrl, HttpMethod.POST, entity, Map.class);
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(pythonServerUrl, HttpMethod.POST, entity, new ParameterizedTypeReference<Map<String, Object>>() {});
 
         // 응답에서 "result" 값을 추출
         Map<String, Object> responseBody = response.getBody();
+
         if (responseBody != null && responseBody.containsKey("result")) {
             return responseBody.get("result").toString();
         }

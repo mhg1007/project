@@ -14,22 +14,21 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/css/main.css"/>
 		<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-            <script type="text/javascript">
-
-                // HTML로딩이 완료되고, 실행됨
-                $(document).ready(function () {
-                    // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                    $("#btnUserReg").on("click", function () {
-                        location.href = "/user/userRegForm";
-                    })
-                    $("#btnLogin").on("click", function () {
-                        location.href = "/user/login";
-                    })
-                    $("#btnTest").on("click", function () {
-                        location.href = "/test/test";
-                    })
+        <script type="text/javascript">
+            // HTML로딩이 완료되고, 실행됨
+            $(document).ready(function () {
+                // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+                $("#btnUserReg").on("click", function () {
+                    location.href = "/user/userRegForm";
                 })
-            </script>
+                $("#btnLogin").on("click", function () {
+                    location.href = "/user/login";
+                })
+                $("#btnTest").on("click", function () {
+                    location.href = "/test/test";
+                })
+            })
+        </script>
 	</head>
     <body class="is-preload">
 		<div id="page-wrapper">
@@ -57,18 +56,16 @@
 					<%} %>
 
 			<!-- Logo -->
-			<img  width="70"  src = "logo5.png" style="margin-right: 0% ;">
-			<h1><a href="index.html" id="logo5.png">REMENTIA </em></a></h1>
+			<img  width="105"  src = "/logo5.png" alt="REMENTIA 로고" style="margin-right: 0% ;">
+			<h1><a href="/index" id="logo5.png">REMENTIA </em></a></h1>
 
 			<!-- Nav -->
             <nav id="nav">
                 <ul>
-                <li class="current"><a href="/index">Home</a></li>
-                <li>
-                <a href="#" style="color: white;"><strong>진단하기</strong></a>
-                </li>
-                <li><a href="left-sidebar.html" style="color: white;"><strong>진단결과보기</strong></a></li>
-                <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
+                    <li class="current"><a href="/index">Home</a></li>
+                    <li><a href="/test/start" style="color: white;"><strong>진단하기</strong></a></li>
+                    <li><a href="/test/resultList" style="color: white;"><strong>진단결과보기</strong></a></li>
+                    <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
                 </ul>
             </nav>
 
