@@ -19,16 +19,6 @@
 
                 // HTML로딩이 완료되고, 실행됨
                 $(document).ready(function () {
-                    // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                    $("#btnUserReg").on("click", function () {
-                        location.href = "/user/userRegForm";
-                    })
-                    $("#btnLogin").on("click", function () {
-                        location.href = "/user/login";
-                    })
-                    $("#btnTest").on("click", function () {
-                        location.href = "/test/test";
-                    })
 
                 })
             </script>
@@ -68,7 +58,7 @@
                     <li class="current"><a href="/index">Home</a></li>
                     <li><a href="/test/start" style="color: white;"><strong>진단하기</strong></a></li>
                     <li><a href="/test/resultList" style="color: white;"><strong>진단결과보기</strong></a></li>
-                    <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
+                    <li><a href="/train/start" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
                 </ul>
             </nav>
 
@@ -167,6 +157,12 @@
                     text-decoration: underline;
                 }
         </style>
-
+        <script>
+            // 페이지를 떠날 때 세션 값 제거
+            window.addEventListener('beforeunload', function (e) {
+                // AJAX 요청을 통해 서버에 세션 값 제거 요청
+                navigator.sendBeacon('/removeSessionResult');
+            });
+        </script>
 	</body>
 </html>

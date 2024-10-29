@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="sample.project.mapper.ITrainMapper">
+    <select id="getTrainList" parameterType="TrainDTO" resultType="TrainDTO">
+        SELECT TRAIN_SEQ, TRAIN_TYPE, TRAIN_RES,
+               TO_CHAR(TRAIN_DT, 'YYYY-MM-DD HH24:MI:SS') AS TRAIN_DT
+        FROM TRAIN
+        WHERE PHONE_NUM=#{phoneNum}
+        ORDER BY TRAIN_SEQ
+    </select>
+    <select id="getTrainLatest" parameterType="TrainDTO" resultType="TrainDTO">
+        SELECT TRAIN_RES
+        FROM TRAIN
+        WHERE PHONE_NUM=#{phoneNum}
+        AND TRAIN_SEQ=(SELECT MAX(A.TRAIN_SEQ) FROM TRAIN A WHERE A.PHONE_NUM=#{phoneNum})
+    </select>
+    <insert id="insertTrain" parameterType="TrainDTO">
+        INSERT INTO TRAIN
+        (TRAIN_SEQ, TRAIN_TYPE, TRAIN_RES, TRAIN_DT, PHONE_NUM)
+        VALUES(
+                (SELECT NVL(MAX(A.TRAIN_SEQ),0)+1 FROM TRAIN A WHERE A.PHONE_NUM=#{phoneNum}),
+                #{trainType}, #{trainRes}, NOW(), #{phoneNum}
+            )
+    </insert>
+</mapper>

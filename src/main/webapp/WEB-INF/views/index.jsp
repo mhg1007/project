@@ -28,10 +28,8 @@
 	</head>
 	<body class="is-preload">
 		<div id="page-wrapper">
-
 			<!-- Header -->
 				<div id="header">
-
                     <%if(session.getAttribute("SS_PHONE_NUM") == null){%>
                     <div id="auth" style="position:absolute; right: 10px; bottom: 93%; display: flex; flex-direction: row;">
                         <a href="/user/userRegForm" style="color: white;">
@@ -60,10 +58,10 @@
 					<!-- Nav -->
 						<nav id="nav">
 							<ul>
-								<li class="current"><a href="/index">Home</a></li>
-								<li><a href="/test/start" style="color:white">진단하기</a></li>
-								<li><a href="/test/resultList" style="color: white;">진단결과보기</a></li>
-								<li><a href="right-sidebar.html" style="color: white;">뇌건강트레이너</a></li>
+                                <li class="current"><a href="/index">Home</a></li>
+                                <li><a href="/test/start" style="color: white;"><strong>진단하기</strong></a></li>
+                                <li><a href="/test/resultList" style="color: white;"><strong>진단결과보기</strong></a></li>
+                                <li><a href="/train/start" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
 							</ul>
 						</nav>
 
@@ -72,7 +70,7 @@
 					<div class="container">
 						<div class="row gtr-200">
 							<section class="col-4 col-12-narrower">
-								<div class="box highlight">
+								<div class="box highlight" onclick="location.href='/test/start';" style="cursor: pointer;">
 										<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-zoom-in" viewBox="0 0 16 16">
 										<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
 										<path d="M10.344 11.742q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1 6.5 6.5 0 0 1-1.398 1.4z"/>
@@ -82,7 +80,7 @@
 								</div>
 							</section>
 							<section class="col-4 col-12-narrower">
-								<div class="box highlight">
+								<div class="box highlight" onclick="location.href='/test/resultList';" style="cursor: pointer;">
 									<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-clipboard2-data" viewBox="0 0 16 16">
 										<path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z"/>
 										<path d="M3 2.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 0 0-1h-.5A1.5 1.5 0 0 0 2 2.5v12A1.5 1.5 0 0 0 3.5 16h9a1.5 1.5 0 0 0 1.5-1.5v-12A1.5 1.5 0 0 0 12.5 1H12a.5.5 0 0 0 0 1h.5a.5.5 0 0 1 .5.5v12a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5z"/>
@@ -92,7 +90,7 @@
 								</div>
 							</section>
 							<section class="col-4 col-12-narrower">
-								<div class="box highlight">
+								<div class="box highlight" onclick="location.href='/train/start';" style="cursor: pointer;">
 									<img width="100" src="logo4.jpg" alt="뇌건강트레이너 로고">
 									<h3 style="margin-top: 5%;">뇌건강트레이너</h3>
 								</div>
@@ -100,6 +98,16 @@
 						</div>
 					</div>
 				</section>
-
+            <style>
+                body {
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f4f4f4;
+                    font-family: Arial, sans-serif;
+                    height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                }
+        </style>
 	</body>
 </html>

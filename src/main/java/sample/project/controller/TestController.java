@@ -81,7 +81,7 @@ public class TestController {
     @GetMapping(value = "result")
     public String testResult(HttpSession session) throws Exception {
 
-        log.info("{}.result start!", this.getClass().getName());
+        log.info("{}.testResult start!", this.getClass().getName());
 
         String result= CmmUtil.nvl((String) session.getAttribute("result"));
 
@@ -95,11 +95,15 @@ public class TestController {
 
         testService.insertTest(pDTO);
 
-        log.info("{}.result end!", this.getClass().getName());
+        log.info("{}.testResult end!", this.getClass().getName());
 
         return "test/result";
     }
 
-
+    @PostMapping("/removeSessionResult")
+    public void removeSessionValue(HttpSession session) {
+        // 세션에서 'result' 속성 제거
+        session.removeAttribute("result");
+    }
 
 }

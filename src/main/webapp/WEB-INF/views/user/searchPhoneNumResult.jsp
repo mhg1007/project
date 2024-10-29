@@ -76,7 +76,7 @@
                 <li class="current"><a href="/index">Home</a></li>
                 <li><a href="/test/start" style="color: white;"><strong>진단하기</strong></a></li>
                 <li><a href="/test/resultList" style="color: white;"><strong>진단결과보기</strong></a></li>
-                <li><a href="right-sidebar.html" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
+                <li><a href="/train/start" style="color: white;"><strong>뇌건강트레이너</strong></a></li>
             </ul>
         </nav>
     </div>

@@ -24,8 +24,8 @@
                 $("#btnLogin").on("click", function () {
                     location.href = "/user/login";
                 })
-                $("#btnTest").on("click", function () {
-                    location.href = "/test/test";
+                $("#btnTrain").on("click", function () {
+                    location.href = "/train/trainList";
                 })
             })
         </script>
@@ -71,7 +71,7 @@
 
 			<div>
                 <div class="login-container" style = "margin : auto; margin-top: 3%; margin-bottom: 5%;">
-                <h2>진단하기</h2>
+                <h2>뇌건강트레이너</h2>
                 <h2></h2>
                     <div style="margin-top: 3%; margin-bottom: 10%">
                         <%if(session.getAttribute("SS_PHONE_NUM") == null){%>
@@ -80,8 +80,8 @@
                         <button id="btnLogin" type="button" class="btn btn-primary">로그인</button>
 
                         <%}else{ %>
-                        <h3>문장 하나를 따라읽어서<br>진단할 수 있습니다<br><br>마이크가 필요합니다</h3>
-                        <button id="btnTest" type="button" class="btn btn-primary">진단하기</button>
+                        <h3>인지 기능 향상에 도움되는<br>뇌 기능 트레이닝을<br>진행합니다<br><br></h3>
+                        <button id="btnTrain" type="button" class="btn btn-primary">트레이닝 시작</button>
                         <%} %>
                     </div>
                 </div>

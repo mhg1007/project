@@ -1,10 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="sample.project.dto.UserInfoDTO" %>
+<%@ page import="sample.project.dto.TrainDTO" %>
 <%@ page import="sample.project.util.CmmUtil" %>
 <%@ page import="sample.project.util.EncryptUtil" %>
 <%
     String ssUserName = CmmUtil.nvl((String) session.getAttribute("SS_USER_NAME")); // 로그인된 회원 이름
     String ssPhoneNum = EncryptUtil.decAES128CBC(CmmUtil.nvl((String) session.getAttribute("SS_PHONE_NUM"))); // 로그인된 회원 휴대전화번호
+
+    TrainDTO rDTO = (TrainDTO) request.getAttribute("rDTO");
+    int result = Integer.parseInt(CmmUtil.nvl((String) rDTO.getTrainRes()));
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
@@ -14,21 +18,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="/css/main.css"/>
 		<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
-        <script type="text/javascript">
-            // HTML로딩이 완료되고, 실행됨
-            $(document).ready(function () {
-                // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-                $("#btnUserReg").on("click", function () {
-                    location.href = "/user/userRegForm";
+            <script type="text/javascript">
+                // HTML로딩이 완료되고, 실행됨
+                $(document).ready(function () {
+                    $("#btnTrain").on("click", function () {
+                        location.href = "/train/trainList";
+                    })
                 })
-                $("#btnLogin").on("click", function () {
-                    location.href = "/user/login";
-                })
-                $("#btnTest").on("click", function () {
-                    location.href = "/test/test";
-                })
-            })
-        </script>
+            </script>
 	</head>
     <body class="is-preload">
 		<div id="page-wrapper">
@@ -56,7 +53,7 @@
 					<%} %>
 
 			<!-- Logo -->
-			<img  width="105"  src = "/logo5.png" alt="REMENTIA 로고" style="margin-right: 0% ;">
+			<img  width="105"  src = "/logo5.png" style="margin-right: 0% ;">
 			<h1><a href="/index" id="logo5.png">REMENTIA </em></a></h1>
 
 			<!-- Nav -->
@@ -71,19 +68,21 @@
 
 			<div>
                 <div class="login-container" style = "margin : auto; margin-top: 3%; margin-bottom: 5%;">
-                <h2>진단하기</h2>
+                <h2>트레이닝 결과</h2>
                 <h2></h2>
-                    <div style="margin-top: 3%; margin-bottom: 10%">
-                        <%if(session.getAttribute("SS_PHONE_NUM") == null){%>
-                        <h3>로그인 후 이용할 수 있습니다<br>회원가입/로그인을 먼저 진행해 주세요</h3>
-                        <button id="btnUserReg" type="button" class="btn btn-primary">회원가입</button>
-                        <button id="btnLogin" type="button" class="btn btn-primary">로그인</button>
-
-                        <%}else{ %>
-                        <h3>문장 하나를 따라읽어서<br>진단할 수 있습니다<br><br>마이크가 필요합니다</h3>
-                        <button id="btnTest" type="button" class="btn btn-primary">진단하기</button>
+                    <div style="margin-top: 3%; margin-bottom: 10%; text-align: center;">
+                        <div>트레이닝 결과는<br><strong><%=result%>점</strong><br>입니다<br><br></div>
+                        <%if(result>=80){%>
+                        <div><strong>아주 잘 하셨어요!</strong></div>
+                        <%}else if(result>=60){ %>
+                        <div>잘 하셨어요!</div>
+                        <%}else if(result>=40){ %>
+                        <div>나쁘지 않아요</div>
+                        <%}else{%>
+                        <div>더 잘할 수 있을 거에요<br>다시 한 번 해볼까요?</div>
                         <%} %>
                     </div>
+                    <button id="btnTrain" type="button" class="btn btn-primary">트레이닝 다시하기</button>
                 </div>
             </div>
             <style>
