@@ -2,6 +2,7 @@ package sample.project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,11 @@ import org.springframework.web.client.RestTemplate;
 import sample.project.dto.TestDTO;
 import sample.project.mapper.ITestMapper;
 import sample.project.service.ITestService;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +25,10 @@ import java.util.Map;
 public class TestService implements ITestService {
 
     private final ITestMapper testMapper;
+    private final S3Client s3Client;
+
+    @Value("${aws.s3.bucket-name}")
+    private String bucketName;
 
     @Override
     public List<TestDTO> getTestList(TestDTO pDTO) throws Exception {
@@ -34,9 +43,24 @@ public class TestService implements ITestService {
     }
 
     @Override
-    public String callPythonService(String filePath) {
+    public String putS3(String keyName, Path filePath) {
+        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(keyName)
+                .build();
+
+        // 파일 업로드
+        s3Client.putObject(putObjectRequest, RequestBody.fromFile(filePath));
+
+        // 업로드된 파일의 URL 생성
+        return "https://" + bucketName + ".s3.amazonaws.com/" + keyName;
+    }
+
+
+    @Override
+    public String callPythonService(String url) {
         RestTemplate restTemplate = new RestTemplate();
-        String pythonServerUrl = "http://localhost:5000/test_process";  // Python 서버 URL
+        String pythonServerUrl = "http://198.19.184.252:5000/test_process";  // Python 서버 URL
 
         // 요청을 위한 헤더 및 본문 설정
         HttpHeaders headers = new HttpHeaders();
@@ -44,7 +68,7 @@ public class TestService implements ITestService {
 
         // JSON 형식으로 파일 경로 전송
         Map<String, String> request = new HashMap<>();
-        request.put("filePath", filePath);
+        request.put("url", url);
 
         HttpEntity<Map<String, String>> entity = new HttpEntity<>(request, headers);
 

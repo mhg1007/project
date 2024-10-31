@@ -2,6 +2,7 @@ package sample.project.service;
 
 import sample.project.dto.TestDTO;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public interface ITestService {
@@ -12,5 +13,7 @@ public interface ITestService {
     //진단 결과 저장하기
     void insertTest(TestDTO pDTO) throws Exception;
 
-    String callPythonService(String filePath);
+    String putS3(String keyName, Path filePath);
+
+    String callPythonService(String url);
 }

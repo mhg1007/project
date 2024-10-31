@@ -61,12 +61,26 @@ public class TestController {
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, HttpSession session) {
         try {
+
+            String UUID= java.util.UUID.randomUUID().toString();
+
             // 파일을 로컬 또는 메모리에 저장
-            Path tempFile = Files.createTempFile("recording", ".wav");
+            Path tempFile = Files.createTempFile(UUID, ".wav");
             file.transferTo(tempFile.toFile());
 
+            // S3 버킷에 업로드
+            String keyName = "uploads/" + tempFile.getFileName();
+            log.info("keyName: {}",keyName);
+
+            String url=testService.putS3(keyName,tempFile);
+            log.info("url: {}", url);
+
+            // 임시 파일 삭제
+            Files.deleteIfExists(tempFile);
+
             // 파일 경로를 Python 서버로 전송
-            String result = testService.callPythonService(tempFile.toString());
+            String result = testService.callPythonService(url);
+            log.info("result: {}",result);
 
             // Python 서버로부터 받은 처리 결과를 저장
             session.setAttribute("result", result);
